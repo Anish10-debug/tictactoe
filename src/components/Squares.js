@@ -5,7 +5,7 @@ const Squares = ({ value, onclick }) => {
     <button type="button" className="square" onClick={onclick}>
       {value}
     </button>
-  ); //props are passed here as value (returns text as value) and onclick
+  ); //props are passed here as value (returns text as value) and onclick from board
 };
 
 export default Squares;
