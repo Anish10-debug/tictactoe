@@ -1,8 +1,20 @@
 import React, { useState } from 'react'; //useState is for hook functions which will provide functionality
 import { calculateWinner } from '../helpers/helpers';
 import Squares from './Squares';
+import StatusMessage from './StatusMessage';
 
 const Board = () => {
+  const renderSquare = position => {
+    return (
+      <Squares
+        value={board[position]}
+        onclick={() => {
+          handlesquareclick(position);
+        }}
+      />
+    );
+  };
+
   const [board, setBoard] = useState(Array(9).fill(null)); //initial state is set to an array of 9 null elements
   //useState returns two things
   //here const[board,setBoard] where first element board(random name)
@@ -14,10 +26,6 @@ const Board = () => {
   const [isXNext, setIsXNext] = useState(true);
 
   const winner = calculateWinner(board); //passing the state to the winner function
-  console.log(winner);
-  const message = winner
-    ? `Winner is ${winner}` //if winner is returning any value other than NULL then print winner
-    : `Next player is ${isXNext ? 'X' : 'O'}`; //else next player
 
   //console.log(board); you will see the value of a square after click in the console
 
@@ -38,26 +46,21 @@ const Board = () => {
         return Squares;
       });
     });
-    //first state would be false. Now we will change the state so that true gets printed on the square
-    setIsXNext(prevState => !prevState); //this will now change the previous state from false tp true
+    //first state would be false. Now we will change the state so that X/O gets printed on the square
+    setIsXNext(prevState => !prevState); //this will now change the previous state from false to true
   };
 
-  const renderSquare = position => {
-    return (
-      <Squares
-        value={board[position]}
-        onclick={() => {
-          handlesquareclick(position);
-        }}
-      />
-    );
-  };
+  // console.log(winner);
+  // const message = winner
+  //   ? `Winner is ${winner}` //if winner is returning any value other than NULL then print winner
+  //   : `Next player is ${isXNext ? 'X' : 'O'}`; //else next player
 
   //3 divs for 3 rows and 3 buttons in each row
   //we pass a function that will call squareclick() function
   return (
     <div className="board">
-      <h2>{message}</h2>
+      {/* <h2>{message}</h2> */}
+      <StatusMessage winner={winner} board={board} isXNext={isXNext} />
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}
