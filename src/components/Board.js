@@ -5,17 +5,18 @@ import StatusMessage from './StatusMessage';
 
 const Board = () => {
   const renderSquare = position => {
+    const isWinningSquare = winningSquares.includes(position); //if the position of the winning squares matches the position
     return (
       <Squares
         value={board[position]}
-        onclick={() => {
-          handlesquareclick(position);
-        }}
+        onclick={() => handlesquareclick(position)}
+        isWinningSquare={isWinningSquare} //use this as a prop in Squares.js for highlighting
       />
     );
   };
 
-  const [board, setBoard] = useState(Array(9).fill(null)); //initial state is set to an array of 9 null elements
+  const NEWGAME = Array(9).fill(null); //an array of 9 null elements
+  const [board, setBoard] = useState(NEWGAME); //initial state is set to an array of 9 null elements
   //useState returns two things
   //here const[board,setBoard] where first element board(random name)
   //is the state and setBoard is the update function
@@ -25,7 +26,7 @@ const Board = () => {
   //isXNext keeps track of next player and setIsXNext is the update function
   const [isXNext, setIsXNext] = useState(true);
 
-  const winner = calculateWinner(board); //passing the state to the winner function
+  const { winner, winningSquares } = calculateWinner(board); //passing the state to the winner function
 
   //console.log(board); you will see the value of a square after click in the console
 
@@ -50,17 +51,23 @@ const Board = () => {
     setIsXNext(prevState => !prevState); //this will now change the previous state from false to true
   };
 
-  // console.log(winner);
-  // const message = winner
-  //   ? `Winner is ${winner}` //if winner is returning any value other than NULL then print winner
-  //   : `Next player is ${isXNext ? 'X' : 'O'}`; //else next player
+  //if we want to start a new game
+  const onNewGame = () => {
+    setBoard(NEWGAME);
+  };
 
-  //3 divs for 3 rows and 3 buttons in each row
-  //we pass a function that will call squareclick() function
+  //here in the newgame button we have done string interpolation
+  //if there is a winner only then the active class of btn-reset class will be applied
   return (
     <div className="board">
-      {/* <h2>{message}</h2> */}
       <StatusMessage winner={winner} board={board} isXNext={isXNext} />
+      <button
+        id="newgame"
+        onClick={onNewGame}
+        className={`btn-reset ${winner ? 'active' : ''}`}
+      >
+        Start New Game
+      </button>
       <div className="board-row">
         {renderSquare(0)}
         {renderSquare(1)}

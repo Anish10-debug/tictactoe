@@ -11,12 +11,33 @@ const StatusMessage = ({ winner, board, isXNext }) => {
   // if winner is returning X/O then print winner
   //else if winner is null areturning nd tie is false then next player
   //else if winner is null and tie is true then tie condition
+  //instead of using simple string interpolation we have used a wrapper(react fragment) for applying the css
+  //an empty bracket after 'Winner is' is for space
   return (
     <div id="status">
       <h3>
-        {winner && `Winner is ${winner}`}
-        {!winner && !tie && `Next player is ${isXNext ? 'X' : 'O'}`}
-        {!winner && tie && `X and O tied`}
+        {winner && (
+          <>
+            Winner is{' '}
+            <span className={winner === 'X' ? 'text-green' : 'text-orange'}>
+              {winner}
+            </span>
+          </>
+        )}
+        {!winner && !tie && (
+          <>
+            Next player is{' '}
+            <span className={isXNext ? 'text-green' : 'text-orange'}>
+              {isXNext ? 'X' : 'O'}{' '}
+            </span>
+          </>
+        )}
+        {!winner && tie && (
+          <>
+            <span className="text-green">X</span> and{' '}
+            <span className="text-orange">O</span> tied
+          </>
+        )}
       </h3>
     </div>
   );
